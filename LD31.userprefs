@@ -1,0 +1,27 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\FishSpawnScript.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Structure_1_Bob.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Scrolling_Parralax.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="201" Column="44" />
+      <File FileName="..\..\SuperSoul\Games\Astronaut Kitty\Src\Assets\Shaders\Invert.shader" Line="1" Column="1" />
+      <File FileName="Assets\InvertShader.shader" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SunriseSunsetShit.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FishingHookScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Tongue_Script.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FishScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FishSpawnScript.cs" Line="6" Column="39" />
+      <File FileName="Assets\Scripts\TextGroupFade.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MusicPlayScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TitleTrigger.cs" Line="8" Column="31" />
+      <File FileName="Assets\Scripts\FadeInScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DebrisScript.cs" Line="19" Column="54" />
+      <File FileName="Assets\Scripts\RotationScript.cs" Line="15" Column="67" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
