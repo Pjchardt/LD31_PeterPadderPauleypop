@@ -36,8 +36,13 @@ public class Player : MonoBehaviour
 
 	public GameObject Gradient;
 
+	public Vector2 touchDirection;
+	public float touchThreshold;
+
 	void Start () 
 	{
+		Input.simulateMouseWithTouches = true;
+
 		currentState = PlayerState.None;
 
 		//hide all prompts
@@ -57,7 +62,7 @@ public class Player : MonoBehaviour
 		{
 			TextGroups[i].GetComponent<TextGroupFade>().ZeroAlpha();
 		}
-		TextGroups[TextGroups.Length-1].transform.FindChild("Arrow").renderer.enabled = false;
+		TextGroups[TextGroups.Length-1].transform.FindChild("Arrow").GetComponent<Renderer>().enabled = false;
 
 		Gradient.SetActive(false);
 
@@ -69,7 +74,7 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
 		currentState = PlayerState.Start;
-		UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
+		UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
 
 		FadeSprite.GetComponent<FadeInScript>().Fade(-1f);
 		ShowTextGroup();
@@ -108,7 +113,7 @@ public class Player : MonoBehaviour
 	{
 		if (animatorRef.GetBool("DoSit"))
 		{
-			if (Input.GetKey(KeyCode.UpArrow))
+			if (Input.GetKey(KeyCode.UpArrow) || getTouchDirection().y > touchThreshold)
 			{
 				animatorRef.SetBool("DoSit", false);
 
@@ -140,7 +145,7 @@ public class Player : MonoBehaviour
 
 	void DoFirstWalkStuff ()
 	{
-		if (Input.GetKey(KeyCode.LeftArrow))
+		if (Input.GetKey(KeyCode.LeftArrow) || getTouchDirection().x < -touchThreshold)
 		{
 			transform.localPosition += Vector3.left * Time.deltaTime * .7f;
 			animatorRef.SetBool("Walking", true);
@@ -151,7 +156,7 @@ public class Player : MonoBehaviour
 				transform.localScale = temp;
 			}
 		}
-		else if (Input.GetKey(KeyCode.RightArrow))
+		else if (Input.GetKey(KeyCode.RightArrow) || getTouchDirection().x > touchThreshold)
 		{
 			transform.localPosition += -Vector3.left * Time.deltaTime  * .7f;
 			if (transform.localPosition.x > 11.77914f)
@@ -194,7 +199,7 @@ public class Player : MonoBehaviour
 				float size = Mathf.Lerp(25f, 4f, posNormal);
 				Camera.main.orthographicSize = size;
 				
-				WindObject.audio.volume = Mathf.Lerp(.1f, .25f, posNormal);
+				WindObject.GetComponent<AudioSource>().volume = Mathf.Lerp(.1f, .25f, posNormal);
 				UpArrowForFeeding.SetActive(false);
 			}
 			else if (transform.localPosition.x < 3.9)
@@ -202,22 +207,22 @@ public class Player : MonoBehaviour
 				UpArrowForFeeding.SetActive(true);
 				if (HasFish)
 				{
-					UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
+					UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
 				}
-				if (Input.GetKey(KeyCode.UpArrow))
+				if (Input.GetKey(KeyCode.UpArrow) || getTouchDirection().y > touchThreshold)
 				{
 					if (HasFish)
 					{
 						Tongue.GetComponent<Animator>().SetBool("Eat", true);
 						HasFish = false;
 						UpArrowForFeeding.SetActive(false);
-						UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
-						UpArrowForFeeding.transform.FindChild("no fish").renderer.enabled = false;
+						UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
+						UpArrowForFeeding.transform.FindChild("no fish").GetComponent<Renderer>().enabled = false;
 					}
 					else
 					{
-						UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = false;
-						UpArrowForFeeding.transform.FindChild("no fish").renderer.enabled = true;
+						UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = false;
+						UpArrowForFeeding.transform.FindChild("no fish").GetComponent<Renderer>().enabled = true;
 						currentState = PlayerState.Standing;
 						DoneFirstWalk = true;
 						whichTextGroup++;
@@ -240,7 +245,7 @@ public class Player : MonoBehaviour
 
 	void DoStandingStuff()
 	{
-		if (Input.GetKey(KeyCode.LeftArrow))
+		if (Input.GetKey(KeyCode.LeftArrow) || getTouchDirection().x < -touchThreshold)
 		{
 			transform.localPosition += Vector3.left * Time.deltaTime * .7f;
 			animatorRef.SetBool("Walking", true);
@@ -251,7 +256,7 @@ public class Player : MonoBehaviour
 				transform.localScale = temp;
 			}
 		}
-		else if (Input.GetKey(KeyCode.RightArrow))
+		else if (Input.GetKey(KeyCode.RightArrow) || getTouchDirection().x > touchThreshold)
 		{
 			transform.localPosition += -Vector3.left * Time.deltaTime  * .7f;
 			if (transform.localPosition.x > 11.77914f)
@@ -275,7 +280,7 @@ public class Player : MonoBehaviour
 			if (transform.localPosition.x > 11.77f)
 			{
 				DownArrowForFishing.SetActive(true);
-				if (Input.GetKey(KeyCode.DownArrow))
+				if (Input.GetKey(KeyCode.DownArrow) || getTouchDirection().y < -touchThreshold)
 				{
 					animatorRef.SetBool("DoSit", true);
 					currentState = PlayerState.Sitting;
@@ -292,7 +297,7 @@ public class Player : MonoBehaviour
 					{
 						//end game
 						ShowTextGroup();
-						TextGroups[whichTextGroup].transform.FindChild("Arrow").renderer.enabled = true;
+						TextGroups[whichTextGroup].transform.FindChild("Arrow").GetComponent<Renderer>().enabled = true;
 						currentState = PlayerState.FinalSit;
 					}
 				}
@@ -324,7 +329,7 @@ public class Player : MonoBehaviour
 				float size = Mathf.Lerp(25f, 4f, posNormal);
 				Camera.main.orthographicSize = size;
 
-				WindObject.audio.volume = Mathf.Lerp(.15f, .35f, posNormal);
+				WindObject.GetComponent<AudioSource>().volume = Mathf.Lerp(.15f, .35f, posNormal);
 				UpArrowForFeeding.SetActive(false);
 			}
 			else if (transform.localPosition.x < 3.9)
@@ -332,26 +337,26 @@ public class Player : MonoBehaviour
 				UpArrowForFeeding.SetActive(true);
 				if (HasFish)
 				{
-					UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
+					UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
 				}
 
-				if (Input.GetKeyDown(KeyCode.UpArrow))
+				if (Input.GetKeyDown(KeyCode.UpArrow) || getTouchDirection().y > touchThreshold)
 				{
 					if (HasFish)
 					{
 						Tongue.GetComponent<Animator>().SetBool("Eat", true);
-						Tongue.audio.Play();
-						Tongue.transform.FindChild("Particle_1").particleSystem.Play();
+						Tongue.GetComponent<AudioSource>().Play();
+						Tongue.transform.FindChild("Particle_1").GetComponent<ParticleSystem>().Play();
 						HasFish = false;
 						whichTextGroup++;
 						UpArrowForFeeding.SetActive(false);
-						UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
-						UpArrowForFeeding.transform.FindChild("no fish").renderer.enabled = false;
+						UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
+						UpArrowForFeeding.transform.FindChild("no fish").GetComponent<Renderer>().enabled = false;
 					}
 					else
 					{
-						UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = false;
-						UpArrowForFeeding.transform.FindChild("no fish").renderer.enabled = true;
+						UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = false;
+						UpArrowForFeeding.transform.FindChild("no fish").GetComponent<Renderer>().enabled = true;
 					}
 
 				}
@@ -374,11 +379,11 @@ public class Player : MonoBehaviour
 		if (animatorRef.GetBool("DoSit"))
 		{
 
-			if (Input.GetKey(KeyCode.LeftArrow) && fishingLineLength <= .05f)
+			if ((Input.GetKey(KeyCode.LeftArrow) || getTouchDirection().x < -touchThreshold) && fishingLineLength <= .05f)
 			{
 				animatorRef.SetBool("DoSit", false);
 				FishSpawner.GetComponent<FishSpawnScript>().KillAllFish();
-				UpArrowForFeeding.transform.FindChild("Feed").renderer.enabled = true;
+				UpArrowForFeeding.transform.FindChild("Feed").GetComponent<Renderer>().enabled = true;
 				HideTextGroups();
 				Gradient.SetActive(false);
 				//FishingHook.transform.GetChild(0).gameObject.renderer.enabled = false;
@@ -441,12 +446,12 @@ public class Player : MonoBehaviour
 	void DoFishingStuff()
 	{
 		//FishingHook.transform.GetChild(0).gameObject.renderer.enabled = true;
-		if (Input.GetKey(KeyCode.DownArrow) && fishingLineLength < 8)
+		if ((Input.GetKey(KeyCode.DownArrow) || Input.GetMouseButton(0)) && fishingLineLength < 8)
 		{
 			fishingLineLength += Time.deltaTime;
 			FishingLine.GetComponent<LineRenderer>().SetPosition(1, new Vector3(0f, -fishingLineLength, 0f));
 		}
-		if (Input.GetKey(KeyCode.UpArrow) && fishingLineLength > 0)
+		if ((Input.GetKey(KeyCode.UpArrow) || (!Input.GetKey (KeyCode.UpArrow) && !Input.GetMouseButton(0))) && fishingLineLength > 0)
 		{
 			fishingLineLength += -Time.deltaTime;
 			FishingLine.GetComponent<LineRenderer>().SetPosition(1, new Vector3(0f, -fishingLineLength, 0f));
@@ -484,12 +489,29 @@ public class Player : MonoBehaviour
 
 	public void PlayLeftFoot()
 	{
-		audio.PlayOneShot(WalkLeft, .5f);
+		GetComponent<AudioSource>().PlayOneShot(WalkLeft, .5f);
 	}
 
 	public void PlayRightFoot()
 	{
-		audio.PlayOneShot(WalkRight, .5f);
+		GetComponent<AudioSource>().PlayOneShot(WalkRight, .5f);
+	}
+
+	Vector2 getTouchDirection() {
+//		float speed;
+
+		if (Input.touchCount == 0) {
+			touchDirection = Vector2.zero;
+		} else if (Input.touchCount > 0) {
+			if (Input.GetTouch (0).phase == TouchPhase.Moved) { //Check if Touch has moved.
+				touchDirection = Input.GetTouch (0).deltaPosition.normalized;  //Unit Vector of change in position
+				//			speed = Input.touches [0].deltaPosition.magnitude / Input.touches [0].deltaTime; //distance traveled divided by time elapsed
+			}
+		}
+
+		print (touchDirection);
+		
+		return touchDirection;
 	}
 
 }

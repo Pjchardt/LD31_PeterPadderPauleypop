@@ -22,13 +22,13 @@ public class TitleTrigger : MonoBehaviour
 
 				if (p.HasFish)
 				{
-					FeedText.renderer.enabled = true;
-					NoFishText.renderer.enabled = false;
+					FeedText.GetComponent<Renderer>().enabled = true;
+					NoFishText.GetComponent<Renderer>().enabled = false;
 				}
 				else
 				{
-					FeedText.renderer.enabled = false;
-					NoFishText.renderer.enabled = true;
+					FeedText.GetComponent<Renderer>().enabled = false;
+					NoFishText.GetComponent<Renderer>().enabled = true;
 				}
 			}
 		}

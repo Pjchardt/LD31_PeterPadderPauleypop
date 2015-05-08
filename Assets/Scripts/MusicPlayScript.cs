@@ -12,7 +12,7 @@ public class MusicPlayScript : MonoBehaviour
 	{
 		if (!played && coll.tag == "Player")
 		{
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 			played = true;
 
 
