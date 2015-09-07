@@ -11,7 +11,7 @@ public class Scrolling_Parralax : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		materialRef = renderer.material;
+		materialRef = GetComponent<Renderer>().material;
 	}
 	
 	// Update is called once per frame

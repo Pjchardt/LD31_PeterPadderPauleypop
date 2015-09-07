@@ -32,6 +32,6 @@ public class Tongue_Script : MonoBehaviour
 	{
 		//beat heart
 		HeartReference.GetComponent<Animator>().SetTrigger("BeatHeart");
-		HeartReference.audio.Play();
+		HeartReference.GetComponent<AudioSource>().Play();
 	}
 }
